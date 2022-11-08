@@ -1,13 +1,14 @@
 <?php
 class Directories
 {
-
+    //private variables
     private $handle;
     private $foldername;
     private $path;
     private $userinput;
     private $link;
 
+    //public methods
     public function makeDir()
     {
         if (isset($_POST['submit'])) {
