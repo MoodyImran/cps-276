@@ -4,7 +4,15 @@ require_once "Pdo_methods.php";
 
 class Crud extends PdoMethods
 {
-
+    private function displayLinks($records)
+    {
+        $list = '<ul>';
+        foreach ($records as $row) {
+            $list .= "<li><a target='_blank' href={$row['file_path']}>{$row['entered_file_name']}</li>";
+        }
+        $list .= '</ul>';
+        return $list;
+    }
     public function getFiles()
     {
 
@@ -23,7 +31,7 @@ class Crud extends PdoMethods
                 return "Files not found.";
             }
         }
-    } 
+    }
 
 
     public function addFile()
@@ -31,7 +39,7 @@ class Crud extends PdoMethods
 
         $pdo = new PdoMethods();
 
-         $sql = "INSERT INTO files (file_name, file_path, entered_file_name) VALUES (:fname, :fpath, :enteredname)";
+        $sql = "INSERT INTO files (file_name, file_path, entered_file_name) VALUES (:fname, :fpath, :enteredname)";
 
         $bindings = [
             [':fname', $_FILES["selectedFile"]["name"], 'str'],
@@ -39,25 +47,13 @@ class Crud extends PdoMethods
             [':enteredname', $_POST['enteredFileName'], 'str']
         ];
 
-         $result = $pdo->otherBinded($sql, $bindings);
+        $result = $pdo->otherBinded($sql, $bindings);
 
         if ($result === 'error') {
             return 'There was an error adding the name';
         } else {
             return "File has been added.";
         }
-    } 
-
-    /*THIS FUNCTION TAKES THE DATA FROM THE DATABASE AND RETURN AN UNORDERED LIST OF THE DATA
-and it is called by getFiles() above */
-
-    private function displayLinks($records)
-    {
-        $list = '<ul>';
-        foreach ($records as $row) {
-            $list .= "<li><a target='_blank' href={$row['file_path']}>{$row['entered_file_name']}</li>";
-        }
-        $list .= '</ul>';
-        return $list;
     }
+
 }
